@@ -5,7 +5,8 @@ var jsxProcess = (function() {
   var atThis = s => s.replace(/@(?=[^"]*(?:"[^"]*"[^"]*)*$)/g, "this");
   var dColonBind = s => s.replace(/([\w$(){}[\]'"]+)::([\w$(){}[\]'"]+)(?=[^"]*(?:"[^"]*"[^"]*)*$)/g, "$1.bind($2)");
   var dotEquals = s => s.replace(/([\w$(){}[\]'"]+) \.= ([\w$(){}[\]'"]+)(?=[^"]*(?:"[^"]*"[^"]*)*$)/g, "$1 = $1.$2");
-  return s => dotEquals(dColonBind(atThis(atThisProp(hashProto(hashConstr(s))))));
+  var dPipeEquals = s => s.replace(/([\w$(){}[\]'"]+) \|\|= ([\w$(){}[\]'"]+)(?=[^"]*(?:"[^"]*"[^"]*)*$)/g, "$1 = $1 || $2");
+  return s => dPipeEquals(dotEquals(dColonBind(atThis(atThisProp(hashProto(hashConstr(s)))))));
 })();
 plugins.add({
   header: "jsx",
